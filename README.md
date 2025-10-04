@@ -153,5 +153,160 @@ iv. **Limited Offline Functionality** – Most features require active internet 
 
 ## Project Implementation 
 
+### Step 1: Set up the Project Environment and Install Dependencies
+Every successful project begins with a strong foundation. For Speak-to-Infrastructure, that foundation is the development environment. Before we can design NLP engines, generate Terraform code, or package executables, we need to make sure our system has the right tools installed and properly configured. If this step is skipped or done incorrectly, later stages (like running Terraform commands or calling cloud SDKs) will fail or behave unpredictably.
+That’s why Step 1 is critical: it ensures consistency, reliability, and a clean workspace where all dependencies are isolated and managed. A well-prepared environment saves us hours of debugging later and allows us to focus on building features instead of fighting setup issues.
+
+This includes:
+
+i.	Installing Python (≥3.9) as our core programming language.
+
+ii.	Setting up VS Code.
+
+iii.	Creating a virtual environment to isolate project dependencies.
+
+iv.	Installing the Python libraries we’ll need (NLP, SDKs, CLI tools).
+
+v.	Installing the Terraform CLI, which is central to provisioning.
+
+
+#### 1.1	Installing Python (≥3.9) as our core programming language
+
+Python is the backbone of our Speak-to-Infrastructure tool. All the AI logic, NLP parsing, cloud SDK integrations, and even Terraform automation will be written in Python. That’s why installing Python correctly is the very first thing we must do.
+
+- Go to the official Python download page: https://www.python.org/downloads/
+- Download the latest stable release ≥3.9 (preferably 3.10 or 3.11 for best compatibility).
+- Run the installer:
+    - ✅ Check the box “Add Python to PATH” before clicking Install Now.
+    - This ensures you can use python from the command line.
+- After installation, open Command Prompt and check:
+```
+  Py --version
+```
+<img width="975" height="80" alt="image" src="https://github.com/user-attachments/assets/75863506-30ad-4c03-a292-bfade4f4a164" />
+
+#### 1.2	Setting up VS Code
+
+We’ll need a powerful code editor to write and organize our Python code, Terraform templates, and configuration files. Visual Studio Code (VS Code) is the most recommended because it’s lightweight, cross-platform, and has excellent extensions for Python, Terraform, and GitHub integration.
+
+- Go to the official download page: https://code.visualstudio.com/
+- Download the installer for your OS (Windows, macOS, or Linux).
+- Run the installer and accept defaults. On Windows, ensure you check:
+    - ✅ Add to PATH
+    - ✅ Register Code as editor for supported file types
+    - ✅ Add "Open with Code" action to Windows Explorer
+- After installation, open VS Code.
+
+  
+Inside VS Code, go to Extensions (Ctrl+Shift+X) and install:
+
+- Python (Microsoft) → for Python linting, IntelliSense, debugging.
+<img width="975" height="284" alt="image" src="https://github.com/user-attachments/assets/e075d5c6-1f79-4abc-ab0b-b09c116f373f" />
+
+- Terraform (HashiCorp) → syntax highlighting, validation, and auto-complete.
+  <img width="975" height="227" alt="image" src="https://github.com/user-attachments/assets/bb0bb7aa-fc76-4116-844c-5008e6135b04" />
+
+- GitHub Pull Requests & Issues → integrates GitHub directly into VS Code.
+  
+With VS Code ready, we’ll have a smooth workflow for writing Python scripts, testing the CLI tool, and generating Terraform projects.
+
+
+#### 1.3 Creating a virtual environment to isolate project dependencies
+A virtual environment isolates project dependencies so they don’t conflict with global Python packages or other projects on your machine. This ensures our Speak-to-Infrastructure tool runs consistently across setups.
+
+- Inside your project folder (speak-to-infrastructure), run;
+```
+py -m venv venv
+```
+This creates a folder named venv containing the isolated Python environment.
+<img width="570" height="260" alt="image" src="https://github.com/user-attachments/assets/726b20ba-a0f7-40e5-9f83-2d79b94c1632" />
+
+
+- Activate the folder by running;
+```
+venv\Scripts\activate
+```
+
+#### 1.4	Installing the Python libraries we’ll need (NLP, SDKs, CLI tools)
+Now that our virtual environment is active, we’ll install the core Python libraries that power our Speak-to-Infrastructure tool. These libraries cover AI/NLP, CLI interaction, validation, and cloud SDKs.
+
+- Upgrade pip first. This makes sure pip can handle new packages smoothly. Run;
+```
+py -m pip install --upgrade pip
+```
+
+- Run this inside your activated virtual environment ((venv) should show in your terminal);
+```
+pip install transformers torch fastapi click typer pydantic boto3 azure-mgmt-resource google-cloud
+``` 
+<img width="975" height="217" alt="image" src="https://github.com/user-attachments/assets/09af0ea1-113f-402e-bb71-4a031f4fb02b" />
+
+Breakdown of Libraries
+  - transformers → Hugging Face library for NLP models (understands natural language).
+  - torch → PyTorch backend for running AI models. (If you prefer TensorFlow, you can swap later, but PyTorch is more common.)
+  - fastapi → Lightweight framework for APIs (we’ll use it if we expose the tool as an API).
+  - click / typer → Frameworks for building nice CLI (command line interfaces) with prompts.
+  - pydantic → For validating and structuring user inputs (e.g., regions, instance types).
+  - boto3 → AWS SDK for Python, lets us validate regions/instances in AWS.
+  - azure-mgmt-resource → Azure SDK to fetch regions/resources in Azure.
+  - google-cloud → Google Cloud SDK for resource validation in GCP.
+
+- After pip finishes, verify installation by running;
+```
+pip list
+```
+<img width="559" height="556" alt="image" src="https://github.com/user-attachments/assets/39d3322d-1bed-4712-8806-eb4b681ec563" />
+
+
+#### 1.5	Installing the Terraform CLI, which is central to provisioning
+Terraform CLI is the heart of this project — it’s what will take the AI-generated .tf files and actually provision cloud infrastructure. Without it, our tool can only generate code but not apply it.
+
+Open your PowerShell as administrator and run these command
+
+- Create a Directory for Terraform
+```
+mkdir "$HOME\terraform"
+cd "$HOME\terraform"
+```
+- Download Terraform v1.13.3
+```
+Invoke-WebRequest -Uri "https://releases.hashicorp.com/terraform/1.13.3/terraform_1.13.3_windows_amd64.zip" -OutFile "terraform_1.13.3_windows_amd64.zip"
+``` 
+<img width="975" height="181" alt="image" src="https://github.com/user-attachments/assets/2268d3f7-3c5d-4349-a3d1-bddc2d0d5f1f" />
+
+- Extract the ZIP File
+```
+Expand-Archive -Path "terraform_1.13.3_windows_amd64.zip" -DestinationPath "$HOME\terraform"
+```
+
+- Add Terraform to PATH (User-level)
+```
+$oldPath = [Environment]::GetEnvironmentVariable("Path", "User")
+$newPath = "$oldPath;$HOME\terraform"
+[Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+```
+- Restart your PowerShell terminal for the PATH update to apply, then verify Installation
+```
+terraform -version
+``` 
+<img width="975" height="84" alt="image" src="https://github.com/user-attachments/assets/11d29aec-0842-4a28-be84-630d992e52d0" />
+
+We have successfully set up a complete development environment with Python, VS Code, a virtual environment, essential libraries, Terraform CLI, and GitHub. This foundation ensures our project has the right tools, isolation, and automation capability to run smoothly. With this groundwork in place, we’re now ready to move into building the actual intelligence of the system in Step 2.
+
+### Step 2: Design the Natural Language Processing NLP engine to parse Natural Language into Infrastructure Intents
+The intelligence of Speak-to-Infrastructure begins with its ability to understand human instructions and convert them into structured infrastructure intents. This is made possible through Natural Language Processing (NLP) — a field of artificial intelligence that enables computers to understand, interpret, and generate human language. Without this layer, the tool would only be a code generator with no sense of context. By designing an NLP engine, we bridge the gap between natural language and Terraform-ready definitions, ensuring that user requests like “create a VPC with two subnets and an EC2 instance” can be parsed into actionable components. This step is critical because it lays the foundation for accuracy, flexibility, and reliability in the way infrastructure requests are interpreted.
+
+This includes:
+
+i. Loading a pre-trained NLP model.
+
+ii. Defining intent categories: networking, compute, database, security, monitoring.
+
+iii. Writing a parser that extracts entities: resource type, counts, configurations.
+
+iv. Building a mapping layer to translate entities into Terraform resource blocks.
+
+v. Testing the NLP engine with sample sentences.
+
 
 
