@@ -1,7 +1,7 @@
 # “Speak-to-Infrastructure: AI-Powered Natural Language to Terraform Generator”
 AI-powered tool that turns natural language into Terraform projects. Supports AWS, Azure, GCP with interactive CLI, validation, and automated provisioning.
 
-## 
+## Introduction
 
 Infrastructure as Code (IaC) has transformed how organizations design, provision, and manage cloud resources. Tools like Terraform have become industry standards because they bring repeatability, version control, and automation into infrastructure management. However, Terraform comes with its own challenges: engineers must learn HashiCorp Configuration Language (HCL), remember countless resource attributes, and constantly cross-reference documentation. For beginners, this is intimidating; for experts, it is time-consuming.
 In a world moving toward low-code and no-code solutions, there is a gap between the technical precision of Terraform and the simplicity modern teams expect. What if provisioning infrastructure was as easy as having a conversation? What if an engineer, a DevOps team lead, or even a non-technical manager could simply describe what they need; “Deploy a VPC with two subnets, one EC2 instance, and an RDS MySQL database”; and a system could automatically generate the complete Terraform project, with modules, variables, and outputs, ready to plan and apply?
@@ -307,6 +307,243 @@ iii. Writing a parser that extracts entities: resource type, counts, configurati
 iv. Building a mapping layer to translate entities into Terraform resource blocks.
 
 v. Testing the NLP engine with sample sentences.
+
+
+##### 2.1 Loading a pre-trained NLP model
+
+The first step in designing the NLP engine is giving our system the ability to understand human language. Instead of training a language model from scratch (which requires huge datasets and computing power), we can leverage pre-trained NLP models that are already trained on vast amounts of text. These models can recognize patterns in sentences, identify entities, and understand intent.
+For this project, a pre-trained model (e.g., from Hugging Face Transformers such as BERT, DistilBERT, or GPT-based models) will serve as the foundation. Once loaded into our tool, we’ll customize it by adding rules, mappings, or fine-tuning so it can interpret DevOps-specific instructions like:
+
+ - “Create a VPC with two subnets.”
+ - “Deploy an EC2 instance with a MySQL database.”
+
+This way, the model isn’t starting from zero — it already understands English structure — we just adapt it to map natural sentences into infrastructure intents.
+
+
+- We need the transformers library from Hugging Face because it contains many pre-trained NLP models (like BERT, DistilBERT, GPT, etc.). run;
+```
+pip install transformers
+```
+<img width="975" height="231" alt="image" src="https://github.com/user-attachments/assets/dd6b650c-205e-4222-93b9-5bc3988a7728" />
+
+- Install PyTorch (backend for running the model). Most Hugging Face models run on PyTorch by default (unless you choose TensorFlow). We’ll go with PyTorch for this project because it’s more widely supported. Run;
+```
+pip install torch
+```
+<img width="975" height="267" alt="image" src="https://github.com/user-attachments/assets/a0654cfb-883d-4c31-bd90-19ab8bc25931" />
+
+- Create a new Python file in your project folder, call it: test_nlp.py
+  <img width="850" height="231" alt="image" src="https://github.com/user-attachments/assets/88b33c5b-4708-403a-b5fe-6568af155ac4" />
+
+- Open test_nlp.py and paste this code;
+  
+  [test_nlp.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_nlp.py)
+
+  <img width="975" height="297" alt="image" src="https://github.com/user-attachments/assets/7b408f46-1032-48d6-916a-d777f1497d75" />
+
+#### What this does:
+- Loads DistilBERT, a smaller version of BERT.
+- Runs a test by filling in the word [MASK] in a sentence.
+- Prints the model’s predictions (e.g., it might say “powerful,” “useful,” etc.).
+
+
+- Run the script with;
+```
+py test_nlp.py
+```
+<img width="975" height="325" alt="image" src="https://github.com/user-attachments/assets/f403bfe9-a61d-4938-9064-5f2fc2fdc56a" />
+
+We successfully loaded a pre-trained NLP model (DistilBERT), tested it with a sample sentence, and confirmed it can understand natural language — giving us the foundation to map human instructions into infrastructure intents.
+
+
+##### 2.2 Defining intent categories: networking, compute, database, security, monitoring
+
+In order for our NLP engine to correctly interpret infrastructure instructions, we need to organize user requests into clear categories. These categories represent the major building blocks of cloud infrastructure.
+
+For example:
+- Networking → VPCs, Subnets, Gateways, Load Balancers
+- Compute → EC2 instances, Auto Scaling, Containers
+- Database → RDS, DynamoDB, Cloud SQL
+- Security → IAM roles, Security Groups, Policies
+- Monitoring → CloudWatch, Alerts, Logging
+  
+By defining these intent categories, we’re creating a framework that the model can map text onto. So, when a user says “create a VPC with two subnets”, the system immediately knows this falls under Networking, and can then parse details like VPC name or CIDR block.
+This step is important because it gives our tool a structured vocabulary for infrastructure; without it, the AI would generate outputs too loosely.
+
+- We’ll create a new Python file where we define the categories that our AI will use. The python file would be named intents.py
+
+- Open intents.py and paste the below code.
+
+  [intents.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/intents.py)
+
+- Run it to confirm;
+```
+py intents.py
+```
+<img width="975" height="819" alt="image" src="https://github.com/user-attachments/assets/4fe63071-7a3a-4826-8e6f-c4fccfaa971f" />
+
+We successfully defined intent categories (networking, compute, database, security, monitoring) and built a simple function that detects which category a user’s request belongs to. This gives our AI a basic ability to classify infrastructure instructions into the right “box,” making it easier to map them to Terraform resources later.
+
+##### 2.3 Writing a parser that extracts entities: resource type, counts, configurations
+Now that our AI can recognize what type of request a user makes, the next step is to make it more interactive.
+
+Think of it like a conversation:
+
+- If the user says “Create a server”, the tool should ask:
+  
+👉 “What size of server do you want?”
+
+👉 “Which region should I deploy it in?”
+
+- If the user says “Set up a database”, it should ask:
+  
+👉 “Which database engine (MySQL, Postgres, etc.)?”
+
+👉 “What storage size do you need?”
+
+This prompt system ensures we don’t guess blindly. Instead, we ask for missing details, validate inputs, and store them for Terraform code generation.
+
+- Create a new file in the project folder named prompts.py
+
+- Paste the below code inside;
+
+  [prompts.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/prompts.py)
+
+- Run this in your terminal;
+```
+pip install typer
+```
+<img width="975" height="225" alt="image" src="https://github.com/user-attachments/assets/8ef59428-33bc-445e-9314-2833e30934ac" />
+
+- Run the program;
+```
+py prompts.py 
+```
+<img width="928" height="842" alt="image" src="https://github.com/user-attachments/assets/85faa527-3b36-46b4-b27d-045fe77f406d" />
+
+We successfully built an interactive prompt system that guides the user step by step in selecting infrastructure options. Instead of typing technical commands, the user chooses from simple menus covering server size, operating system, database engine, networking, security, and monitoring. At the end, the tool generates a clear summary of all selections.
+This makes the system beginner-friendly, reduces errors, and prepares structured input that will later be translated into Terraform code.
+
+#### 2.4 Building a mapping layer to translate entities into Terraform resource blocks
+Now that our system can collect structured user inputs (like server size, OS, database, networking, etc.), we need a way to map those choices into real Terraform resource definitions.
+
+Think of it like this:
+
+- The user’s choice is the idea → e.g., “Medium server, Ubuntu OS, MySQL database.”
+- The mapping layer is the translator → it takes those ideas and turns them into actual Terraform code blocks.
+- The Terraform files (main.tf, variables.tf, outputs.tf) are the final language that the cloud understands.
+- 
+Example:
+
+- If the user picks Medium (t3.medium) → the mapping layer generates a Terraform block for an AWS EC2 instance (or Azure VM / GCP Compute Engine depending on provider).
+- If the user picks MySQL → it generates a Terraform block for an RDS MySQL database.
+- If the user picks Custom VPC with Subnet → it creates Terraform code for a VPC and subnet.
+
+
+This step is critical because it connects the interactive wizard (Step 2.3) with the infrastructure-as-Code automation. Without it, the tool would just collect choices but never build the infrastructure.
+
+- Create a script named infrastructure_wizard.py and paste the below script inside
+  
+  [infrastructure_wizard.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/infrastructure_wizard.py)
+
+##### What This Script Does
+
+This script is a multi-cloud interactive wizard that helps users design infrastructure without needing to know Terraform syntax. Instead of writing code manually, the user goes through a guided step-by-step process where they choose options from menus.
+
+i. Asks the user to choose a cloud provider (AWS, Azure, or GCP).
+
+ii.	Guides the user through prompts to select server size, operating system, database, networking, security, and monitoring options.
+
+iii. Maps each user choice to the correct Terraform resource block for the chosen provider.
+
+iv.	Generates a main.tf file containing Terraform code for compute, database, networking, security, and monitoring.
+
+v.	Generates a variables.tf file to define reusable variables like region.
+
+vi.	Generates an outputs.tf file to show important values like server ID or public IP.
+
+vii.	Prints a final summary of all the user’s choices at the end.
+
+viii.	Overall, it transforms simple menu-driven inputs into a ready-to-run Terraform project.
+
+
+- Run the program;
+```
+py infrastructure_wizard.py 
+```
+<img width="975" height="656" alt="image" src="https://github.com/user-attachments/assets/7838625a-f841-4c16-b083-6478834a9ffd" />
+
+#### 2.5 Testing the NLP engine with sample sentences
+The goal here is to test whether our NLP engine can interpret natural language requests and map them into infrastructure intents (like compute, database, networking, etc.).
+What we’ll do in 2.5:
+
+i.	Take sample sentences (e.g., “Deploy a small Ubuntu server on AWS with MySQL”).
+
+ii.	Run them through the NLP intent parser (the script we built in Step 2.2).
+
+iii.	Verify that the parser correctly identifies:
+
+  - Cloud Provider (AWS, Azure, GCP)
+  - Server Size (Small, Medium, Large)
+  - Operating System (Ubuntu, Windows, etc.)
+  - Database (MySQL, PostgreSQL, MongoDB)
+  - Networking (Default VPC, Custom VPC, etc.)
+  - Security & Monitoring
+
+- Create a new file called test_nlp_infra.py and paste the below code in it;
+  
+  [test_nlp_infra.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_nlp_infra.py)
+
+##### What this script does
+
+i.	Loads the DistilBERT NLP model.
+
+ii.	Runs a few sample infrastructure requests through it.
+
+iii. Just tests whether the model understands context (this is the warm-up before linking directly with intents.py). 
+
+iv.	Prints the results (so you’ll see what the AI thinks fits into the sentence).
+
+- Run the script:
+```
+py test_nlp_infra.py
+```
+<img width="952" height="963" alt="image" src="https://github.com/user-attachments/assets/9cdefa26-c7ad-441c-8109-8ec32db15330" />
+
+In this Step, we successfully designed and implemented the Natural Language Processing (NLP) engine for the Speak-to-Infrastructure project. The goal of this step was to ensure our system could understand plain English instructions and convert them into structured infrastructure intents that later translate into Terraform code.
+
+Here’s what was achieved:
+
+i.	Loaded a Pre-trained NLP Model → We used Hugging Face’s DistilBERT model to give the tool an immediate ability to interpret natural language without training from scratch.
+
+ii.	Defined Intent Categories → We organized all cloud-related tasks into key categories: networking, compute, database, security, monitoring, provider, and operating system.
+
+iii.	Built an Intent Parser → A rule-based parser was created to extract entities (e.g., “server,” “MySQL,” “Ubuntu”) from user sentences.
+
+iv.	Added Interactive Prompts → The system asks clarifying questions (e.g., “Which server size do you want?”) so the user selects from clear options instead of typing complex inputs.
+
+v.	Developed a Mapping Layer → User choices are translated into real Terraform resource blocks for AWS, Azure, and GCP.
+
+vi.	Tested with Sample Sentences → Sentences like “Deploy a small Ubuntu server on AWS with MySQL” were parsed successfully into intents such as provider=AWS, compute=small, os=Ubuntu, database=MySQL.
+
+##### Overall Result:
+Step 2 gave our tool its intelligence layer. Instead of blindly generating Terraform code, the system now understands user requests, classifies them into intents, asks follow-up questions when needed, and maps everything into structured infrastructure definitions. This provides the foundation for seamless automation in later steps.
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
 
 
 
