@@ -530,6 +530,252 @@ vi.	Tested with Sample Sentences → Sentences like “Deploy a small Ubuntu ser
 Step 2 gave our tool its intelligence layer. Instead of blindly generating Terraform code, the system now understands user requests, classifies them into intents, asks follow-up questions when needed, and maps everything into structured infrastructure definitions. This provides the foundation for seamless automation in later steps.
 
 
+### Step 3: Build the interactive prompt system for input validation
+
+After successfully building the Natural Language Processing (NLP) engine in Step 2, the next critical milestone is giving the system a voice and a face, a way for users to actually interact with it.
+
+Step 3 transforms Speak-to-Infrastructure from a background intelligence tool into a truly interactive assistant that can communicate with users through both voice and text.
+The goal of this step is to design a dual-mode interaction framework that allows users to either speak or type their infrastructure requests and to receive confirmations, clarifications, and validations through the same channels. This is the stage where our project evolves from “AI that understands infrastructure” to “AI that converses about infrastructure.”
+
+Through this interactive prompt system, we will:
+- Create an intuitive command-line interface (CLI) for text users.
+- Integrate speech-to-text (STT) and text-to-speech (TTS) libraries for voice interaction.
+- Build real-time validation using cloud SDKs (AWS, Azure, GCP).
+- Implement context-aware question flows that ask for only missing or ambiguous details.
+- Introduce error handling, mode switching, and final configuration summaries that work in both voice and text.
+
+Below is the project workflow for thus step
+3.1 Design Dual-Mode Interaction Framework (Voice + Text)
+
+3.2 Implement Voice Interaction System
+
+3.3 Implement Text Interaction System
+
+3.4 Create Hybrid Mode Functionality
+
+3.5 Build Intelligent Prompt Logic for Missing Infrastructure Details
+
+3.6 Integrate Cloud SDK Validation with Dual Feedback
+
+3.7 Build Input Validation Rules with Pydantic Schemas
+
+3.8 Create Comprehensive Error Handling and Re-Prompt Mechanisms
+
+3.9 Store Validated Configuration with Dual-Mode Summary
+
+3.10 Test Prompt System Comprehensively
+
+
+#### 3.1 Design Dual-Mode Interaction Framework (Voice + Text)
+
+Right now, our tool is a smart brain that works through a text-based wizard (infrastructure_wizard.py). It's powerful, but it only has one way to talk: typing.
+
+Our goal is to give our brain (the app) two new faces and one new voice.
+
+- A Text Face: A more polished and professional Command-Line Interface (CLI).
+- A Voice Face: The ability to listen through the microphone and talk through the speakers.
+- A Mode Selector: A simple menu at the very start that lets the user choose how they want to talk to the tool.
+
+Think of it like this: Our project is a car. Until now, it only had a manual transmission (the text wizard). We are now adding an automatic transmission (voice mode) and a little switch on the dashboard to let the driver choose which one they prefer.
+	
+- We will create a simple, clear menu that asks the user how they want to interact. Create a new file in your project folder and name it orchestrator.py and paste the below code
+
+     [orchestrator.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/orchestrator.py)
+
+
+
+- Run the file from your terminal to make sure it works perfectly.
+py orchestrator.py
+
+<img width="852" height="301" alt="image" src="https://github.com/user-attachments/assets/d42c428b-cf77-45d4-96c5-1f0bf0d4e67f" />
+
+Now that the user can choose voice mode, we need to give our program the ability to hear. We do this by installing a library that can turn microphone input into text.
+We will install the SpeechRecognition library. It's the easiest and most popular one for this job. It acts as a universal wrapper for many different speech-to-text engines.
+
+- Run this command to install SpeechRecognition.
+```
+pip install SpeechRecognition
+```
+<img width="975" height="323" alt="image" src="https://github.com/user-attachments/assets/b4d6545b-7cc6-4633-b92f-857ef121da15" />
+
+ 
+- SpeechRecognition is just a manager. It needs a worker to do the actual sound processing. The most common and reliable one is PyAudio. Install it with this command:
+```
+pip install PyAudio
+```
+<img width="888" height="239" alt="image" src="https://github.com/user-attachments/assets/547a00c6-b4b8-41cc-b076-8b4e9fbb2f77" />
+
+
+- Let's make sure everything installed correctly and do a hearing test. Create a new file called test_hearing.py and paste this code:
+
+  [test_hearing.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_hearing.py)
+
+- Run the file and speak into your microphone when it says "Listening...".
+py test_hearing.py
+<img width="975" height="847" alt="image" src="https://github.com/user-attachments/assets/719632f0-a923-4998-827a-a820ba97c971" />
+ 
+
+Now that our program can hear the user, we need to teach it how to speak back. We do this by installing a Text-to-Speech (TTS) library.
+
+- Run this command to install;
+```
+pip install pyttsx3
+```
+<img width="930" height="495" alt="image" src="https://github.com/user-attachments/assets/91d82305-c872-4317-ade7-e220ce7959c0" />
+
+
+- Do a Super Simple "Speaking Test". Let's make sure it works. Create a new file called test_speaking.py and paste this code:
+
+ [test_speaking.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_speaking.py)
+
+  
+- Run the file. You should hear the computer speak the test message.
+```
+py test_speaking.py
+```
+<img width="975" height="829" alt="image" src="https://github.com/user-attachments/assets/0a4e4919-db31-4f3e-8de8-6d6322005ee9" />
+
+ 
+
+Right now, our text mode uses simple input() and print() statements. This works, but we can make it more professional, easier to use, and less error-prone. We will use Typer because it's modern, intuitive, and perfect for building CLIs.
+
+
+
+- Let’s install typer by running the command;
+```
+pip install typer
+```
+<img width="975" height="393" alt="image" src="https://github.com/user-attachments/assets/e9e26e00-be5a-41c7-b035-f85991a26fed" />
+ 
+
+- Let’s do a Simple Typer Test. Let's learn the basics. Create a new file called test_typer.py and paste this code:
+
+   [test_typer.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_typer.py)
+
+- Now, try running the file in different ways to see how Typer works: Test 1 - Get Help:
+```
+py test_typer.py –help
+```
+<img width="975" height="272" alt="image" src="https://github.com/user-attachments/assets/24d34202-7bd6-43ce-89d1-c786b342b3b4" />
+
+
+
+
+- Test 2 - Run the hello command:
+```
+py test_typer.py hello Dave
+```
+<img width="752" height="119" alt="image" src="https://github.com/user-attachments/assets/6403cdb1-7a28-45e1-8820-d49afb5160dc" />
+
+
+- Test 3 - Run the menu command:
+```
+py test_typer.py menu
+```
+<img width="672" height="806" alt="image" src="https://github.com/user-attachments/assets/bf72210a-6f42-4118-a027-2eea50c8067d" />
+
+
+Now, we need to create a reusable function that we can call whenever we want to listen to the user in voice mode.
+
+- Create a new file called voice_engine.py in your project folder. Write the Core Listening Function. Code below
+
+ [voice_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/voice_engine.py)
+
+
+- Run the voice engine test to make sure everything works together:
+```
+py voice_engine.py
+``` 
+<img width="975" height="776" alt="image" src="https://github.com/user-attachments/assets/6b28f223-3d3b-44dd-b4f0-63cd9bbe69eb" />
+
+We're going to create a simple test that brings everything together and lets us test both input methods (Voice and Text).
+
+- Create a new file called test_modes.py and paste this code:
+
+   [test_modes.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_modes.py)
+
+
+- Run the Comprehensive Test;
+```
+py test_modes.py
+``` 
+<img width="966" height="548" alt="image" src="https://github.com/user-attachments/assets/2dd8a317-aa60-4953-8f22-131c00f4a900" />
+
+#### 3.2 Implement voice interaction system
+
+We've successfully given your application the basic ability to hear and speak. It can detect speech through the microphone and respond with synthesized voice. However, this is comparable to teaching someone the alphabet without yet showing them how to form sentences or hold conversations.
+
+Now, we are about moving from those raw capabilities to creating a fluid and reliable conversational experience. We will transform the simple voice functions into an interactive system that feels intelligent and responsive. This involves making the tool more robust against errors, allowing it to confirm its understanding with you, and providing clear feedback so you always know what it's processing.
+
+The goal is to build trust in the voice interface. You should feel confident that when you speak a command, the system has understood you correctly before it takes any action. We will add layers of verification and clarity to ensure the conversation between you and the tool is as smooth and error-free as possible.
+
+- Right now, our listen_to_speech() function works, but it's basic. We're going to make it much more robust and user-friendly. Create a new file enhanced_voice_engine.py and paste the below
+
+   [enhanced_voice_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/enhanced_voice_engine.py)
+
+- Test the new enhanced system by running;
+```
+py enhanced_voice_engine.py
+```
+<img width="975" height="726" alt="image" src="https://github.com/user-attachments/assets/cd137130-48a0-47b4-b168-2edd6ed6f343" />
+
+
+Now we'll enhance the text-to-speech system to make the computer's voice more natural and appropriate for an infrastructure assistant.
+
+- Create a new file advanced_tts_engine.py and paste the below;
+
+   [advanced_tts_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/advanced_tts_engine.py)
+
+
+- Test the advanced TTS system by running this command;
+```
+py advanced_tts_engine.py
+```
+ <img width="975" height="576" alt="image" src="https://github.com/user-attachments/assets/7d93860a-235a-499f-9b90-1be760cb1dce" />
+
+
+The next is a cool feature that makes the voice interaction feel more natural. Instead of always listening, the system will wait for a wake word like "Hey Assistant" before it starts processing commands.
+
+- Create a new file wake_word_detector.py and paste the below code
+
+   [wake_word_detector.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/wake_word_detector.py)
+
+- Test the wake word detection
+```
+py wake_word_detector.py
+``` 
+<img width="975" height="438" alt="image" src="https://github.com/user-attachments/assets/c64b549a-504f-4215-8a3a-6eb4156b9ea0" />
+
+We would now build a voice confirmation system. This feature makes the interaction much more reliable. 
+
+- Create a new file voice_confirmation_system.py and paste the below code
+
+   [voice_confirmation_system.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/voice_confirmation_system.py)
+
+- Test the confirmation system. Run;
+```
+py voice_confirmation_system.py
+``` 
+<img width="975" height="361" alt="image" src="https://github.com/user-attachments/assets/c43489dc-d727-41c4-bbf9-de67792a5fe2" />
+
+Now, we would implement voice-to-text transcription display for verification. This feature gives users visual confirmation of what the system understood by displaying the transcribed text on screen. This provides dual verification - both hearing the confirmation and seeing the text. 
+
+- Create a new file voice_transcription_display.py and paste the below code
+
+   [voice_transcription_display.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/voice_transcription_display.py)
+
+- Test the transcription display system by running the command;
+```
+py voice_transcription_display.py
+``` 
+<img width="975" height="691" alt="image" src="https://github.com/user-attachments/assets/bd463700-4ecf-4385-8ff0-c23e4c0e4e91" />
+
+#### 3.3 Implement text interaction system
+
+
+
+
+
 
 
 
