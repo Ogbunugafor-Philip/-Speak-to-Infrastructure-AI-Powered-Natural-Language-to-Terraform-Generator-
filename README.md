@@ -790,6 +790,144 @@ py voice_transcription_display.py
 
 #### 3.3 Implement text interaction system
 
+The step marks a critical phase in our project: the implementation of the robust, text-based interaction system. While the voice interface offers a natural and intuitive way to command infrastructure, this text-based CLI (Command Line Interface) serves as the essential, reliable backbone. It ensures precision and clarity, especially for complex configurations, and acts as a dependable fallback when voice recognition is impractical or fails in noisy environments.
+The core objective of this step is to build a structured, menu-driven prompt system that guides the user seamlessly from a high-level infrastructure request to a fully detailed, validated configuration. We will design intuitive, numbered selection lists for choosing cloud providers and resource types, implement keyboard shortcuts for power users, and create clear confirmation prompts. This text-based flow is engineered to capture all the necessary details the NLP engine requires, filling in any gaps through a logical series of questions and choices.
+
+Ultimately, this text interaction system is not a standalone feature but a complementary mode to the voice interface. It is a foundational component of our dual-mode architecture, ensuring that the application remains functional, precise, and accessible under all conditions, paving the way for a seamless hybrid experience where users can switch between voice and text at will.
+
+- We will create a text menu that asks the user what they want to do. Create a new Python file cli_prompts.py and paste the below code
+
+  [cli_prompts.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/cli_prompts.py)
+
+
+- Run it with the command
+ ```
+py cli_prompts.py
+```
+<img width="922" height="567" alt="image" src="https://github.com/user-attachments/assets/a05b1367-40d2-4805-806c-97f521cd1d90" />
+
+
+We'll create sub-menus with numbered choices for infrastructure components. This is like going deeper into the restaurant menu to choose your main course, side dishes, and drinks.
+
+
+- Create a new file numbered_menus.py and paste the below code in it
+
+  [numbered_menus.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/numbered_menus.py)
+
+
+- Run it with the command
+ ```
+py numbered_menus.py
+``` 
+<img width="780" height="784" alt="image" src="https://github.com/user-attachments/assets/1ed5ee81-2c16-4cb7-98b7-6b64884481e4" />
+
+We'll add single-key shortcuts (like 'q' for quit, 'b' for back) to make navigation faster for power users.
+
+- Create a file keyboard_shortcuts.py and paste the below script
+
+  [keyboard_shortcuts.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/keyboard_shortcuts.py)
+
+- Run it with the command 
+```
+py keyboard_shortcuts.py
+``` 
+<img width="836" height="708" alt="image" src="https://github.com/user-attachments/assets/ad69cea1-a873-46d2-a2dc-97e35a0ec484" />
+
+We'll add safety confirmation prompts before destructive actions (like deleting infrastructure) and final confirmation before creating resources.
+
+- Create this new file called confirmation_prompts.py and paste the below code
+
+  [confirmation_prompts.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/confirmation_prompts.py)
+
+
+
+- Run it with the command
+ ```
+py confirmation_prompts.py
+```
+<img width="906" height="767" alt="image" src="https://github.com/user-attachments/assets/d07b660e-cfef-4655-b193-d836255ad86c" />
+
+
+#### 3.4 Create hybrid mode functionality
+Now that we have both voice interaction (from previous steps) and text interaction (just completed) working independently. This step focuses on seamlessly blending these two modes into a unified hybrid experience. This is where we transform our application from having separate voice and text systems into a truly intelligent, multi-modal interface that adapts to the user's preferred way of communicating.
+The hybrid mode will allow users to start with voice commands for natural, rapid input, then switch to text for precise configuration details, or vice-versa. We'll implement smart fallback mechanisms where voice recognition failures automatically trigger text prompts, and provide visual feedback for voice interactions alongside text displays. This creates a robust system that leverages the strengths of both interaction methods while compensating for their individual limitations, ensuring a smooth user experience regardless of environment or preference.
+
+- We'll create a system that lets users switch between voice and text input at any point during their session. Create this new file called hybrid_mode.py and paste the below code
+
+[hybrid_mode.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/hybrid_mode.py)
+
+  
+- Run it with the command
+ ```
+py hybrid_mode.py
+``` 
+<img width="975" height="606" alt="image" src="https://github.com/user-attachments/assets/71275de4-ea52-4a62-a7cb-87428b3100a7" />
+
+We'll create smart fallback system where failed voice recognition automatically switches to text input.
+
+
+- Create this new file called voice_fallback.py and paste the below code
+
+  [voice_fallback.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/voice_fallback.py)
+
+- Run it with the command
+ ```
+py voice_fallback.py
+``` 
+<img width="961" height="730" alt="image" src="https://github.com/user-attachments/assets/c37a7b75-cbe6-4ed6-a6ee-a6aa20767a12" />
+
+We'll create a unified display that shows visual feedback for both voice and text interactions simultaneously.
+
+- Create this new file called dual_feedback.py and paste the below code
+
+  [dual_feedback.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/dual_feedback.py)
+
+
+- Run it with the command 
+```
+py dual_feedback.py
+ ```
+<img width="975" height="704" alt="image" src="https://github.com/user-attachments/assets/1272d854-d142-4b31-adbe-2f86463e1aa7" />
+
+
+We'll create a system where users can manually edit voice-recognized text before it's processed.
+
+- Create this new file called voice_text_editor.py and paste the below code
+
+   [voice_text_editor.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/voice_text_editor.py)
+
+
+- Run it with the command
+ ```
+py voice_text_editor.py
+``` 
+<img width="975" height="728" alt="image" src="https://github.com/user-attachments/assets/ef395957-845c-4982-bf31-2732f70b3903" />
+
+#### 3.5 Build intelligent prompt logic for missing infrastructure details
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
