@@ -914,6 +914,8 @@ Let us create a voice-driven prompt that intelligently asks the user for missing
 
 - create a file named voice_prompt_cloud_provider.py and paste the below codes in it
 
+ [voice_prompt_cloud_provider.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/voice_prompt_cloud_provider.py)
+
 - Run the command to test the code
 ```
   py voice_prompt_cloud_provider.py
@@ -925,6 +927,8 @@ It presents a numbered menu of cloud providers, validates user input, and confir
 
 
 - Create a file named text_prompt_cloud_provider.py and paste the below code in it
+
+	[text_prompt_cloud_provider.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/text_prompt_cloud_provider.py)
 
 - Run the command to test the code
 ```
@@ -938,6 +942,9 @@ The goal is to make conversations more natural and reduce repetitive or irreleva
 
 - create a file named context_followup_prompts.py and paste the below codes in it
 
+   [context_followup_prompts.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/context_followup_prompts.py)
+
+
 - Run the command to test the code
 ```
   py context_followup_prompts.py
@@ -949,6 +956,9 @@ Instead of repeating fixed prompts, it will generate dynamic voice questions tha
 
 - create a file named voice_question_templates.py and paste the below codes in it
 
+  [voice_question_templates.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/voice_question_templates.py)
+
+
 - Run the command to test the code
 ```
   py voice_question_templates.py
@@ -959,6 +969,8 @@ Let us build a text-based structured prompt system with numbered menu selections
 
 
 - create a file named structured_text_menu.py and paste the below codes in it
+
+  [structured_text_menu.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/structured_text_menu.py)
 
 - Run the command to test the code
 ```
