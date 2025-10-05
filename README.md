@@ -904,9 +904,67 @@ py voice_text_editor.py
 <img width="975" height="728" alt="image" src="https://github.com/user-attachments/assets/ef395957-845c-4982-bf31-2732f70b3903" />
 
 #### 3.5 Build intelligent prompt logic for missing infrastructure details
+In real interactions, users often provide incomplete instructions such as “Create a database” without specifying the provider, size, or configuration. This step introduces intelligent prompt logic — a system that detects missing information and asks smart, targeted questions to fill those gaps. It ensures that the assistant can guide users smoothly, whether they speak or type their responses.
+
+Unlike earlier sections that focused on how users communicate (voice, text, or hybrid), this step focuses on what the system asks next. It uses context-aware reasoning to decide which follow-up questions make sense — for instance, “Which cloud provider would you like to use?” followed by numbered options like “1. AWS 2. Azure 3. GCP.” Each prompt adapts based on previous answers, making the dialogue natural and efficient.
+
+By adding this layer of intelligence, the assistant becomes more than a listener — it becomes a guided infrastructure architect, capable of understanding intent, identifying what’s missing, and completing the details interactively. This lays the groundwork for the validation and feedback logic that will follow in the next Step.
+
+Let us create a voice-driven prompt that intelligently asks the user for missing information — in this case, the cloud provider. When the user speaks a response (e.g., “AWS” or “Google Cloud”), the system recognizes it, validates it, and stores it as part of the infrastructure context.
+
+- create a file named voice_prompt_cloud_provider.py and paste the below codes in it
+
+- Run the command to test the code
+```
+  py voice_prompt_cloud_provider.py
+```
+<img width="657" height="508" alt="image" src="https://github.com/user-attachments/assets/9134929a-56ae-491f-a508-76804ae44dda" />
+
+Let us builds a simple text-based interaction for users who prefer typing instead of speaking.
+It presents a numbered menu of cloud providers, validates user input, and confirms the final choice through clear on-screen prompts.
 
 
+- Create a file named text_prompt_cloud_provider.py and paste the below code in it
 
+- Run the command to test the code
+```
+  py text_prompt_cloud_provider.py
+```
+<img width="738" height="588" alt="image" src="https://github.com/user-attachments/assets/e162b2e6-879c-46ac-8d85-091389e288f1" />
+
+
+Now, the assistant becomes smarter — it remembers previous user inputs (like chosen provider) and dynamically tailors the next question.
+The goal is to make conversations more natural and reduce repetitive or irrelevant prompts.
+
+- create a file named context_followup_prompts.py and paste the below codes in it
+
+- Run the command to test the code
+```
+  py context_followup_prompts.py
+```
+<img width="747" height="637" alt="image" src="https://github.com/user-attachments/assets/ed581e7f-7e1e-42a7-99c8-d525c3a62e33" />
+
+Now, we give your assistant a more natural personality.
+Instead of repeating fixed prompts, it will generate dynamic voice questions that sound conversational and adapt to the context — such as the selected provider, resource type, or stage of configuration.
+
+- create a file named voice_question_templates.py and paste the below codes in it
+
+- Run the command to test the code
+```
+  py voice_question_templates.py
+```
+<img width="737" height="535" alt="image" src="https://github.com/user-attachments/assets/36f65a27-4774-4a7c-9427-74bc9ee45885" />
+
+Let us build a text-based structured prompt system with numbered menu selections, ensuring users can conveniently choose infrastructure options in a clean, interactive CLI format.
+
+
+- create a file named structured_text_menu.py and paste the below codes in it
+
+- Run the command to test the code
+```
+  py structured_text_menu.py
+```
+<img width="755" height="633" alt="image" src="https://github.com/user-attachments/assets/432c28cd-54a6-4545-a3de-4a25d2300e0d" />
 
 
 
