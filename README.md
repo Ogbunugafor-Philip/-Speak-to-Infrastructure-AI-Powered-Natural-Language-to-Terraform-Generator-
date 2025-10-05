@@ -337,7 +337,8 @@ pip install torch
 
 - Open test_nlp.py and paste this code;
   
-  [test_nlp.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_nlp.py)
+  [test_nlp.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/test_nlp.py)
+
 
   <img width="975" height="297" alt="image" src="https://github.com/user-attachments/assets/7b408f46-1032-48d6-916a-d777f1497d75" />
 
@@ -374,7 +375,8 @@ This step is important because it gives our tool a structured vocabulary for inf
 
 - Open intents.py and paste the below code.
 
-  [intents.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/intents.py)
+  [intents.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/intents.py)
+
 
 - Run it to confirm;
 ```
@@ -407,7 +409,8 @@ This prompt system ensures we don’t guess blindly. Instead, we ask for missing
 
 - Paste the below code inside;
 
-  [prompts.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/prompts.py)
+  [prompts.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/prompts.py)
+
 
 - Run this in your terminal;
 ```
@@ -444,7 +447,8 @@ This step is critical because it connects the interactive wizard (Step 2.3) with
 
 - Create a script named infrastructure_wizard.py and paste the below script inside
   
-  [infrastructure_wizard.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/infrastructure_wizard.py)
+  [infrastructure_wizard.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/infrastructure_wizard.py)
+
 
 ##### What This Script Does
 
@@ -492,7 +496,8 @@ iii.	Verify that the parser correctly identifies:
 
 - Create a new file called test_nlp_infra.py and paste the below code in it;
   
-  [test_nlp_infra.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_nlp_infra.py)
+  [test_nlp_infra.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/test_nlp_infra.py)
+
 
 ##### What this script does
 
@@ -580,12 +585,15 @@ Think of it like this: Our project is a car. Until now, it only had a manual tra
 	
 - We will create a simple, clear menu that asks the user how they want to interact. Create a new file in your project folder and name it orchestrator.py and paste the below code
 
-     [orchestrator.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/orchestrator.py)
+     [orchestrator.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/orchestrator.py)
+
 
 
 
 - Run the file from your terminal to make sure it works perfectly.
+```
 py orchestrator.py
+```
 
 <img width="852" height="301" alt="image" src="https://github.com/user-attachments/assets/d42c428b-cf77-45d4-96c5-1f0bf0d4e67f" />
 
@@ -608,10 +616,13 @@ pip install PyAudio
 
 - Let's make sure everything installed correctly and do a hearing test. Create a new file called test_hearing.py and paste this code:
 
-  [test_hearing.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_hearing.py)
+  [test_hearing.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/test_hearing.py)
+
 
 - Run the file and speak into your microphone when it says "Listening...".
+```
 py test_hearing.py
+```
 <img width="975" height="847" alt="image" src="https://github.com/user-attachments/assets/719632f0-a923-4998-827a-a820ba97c971" />
  
 
@@ -626,7 +637,8 @@ pip install pyttsx3
 
 - Do a Super Simple "Speaking Test". Let's make sure it works. Create a new file called test_speaking.py and paste this code:
 
- [test_speaking.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_speaking.py)
+ [test_speaking.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/test_speaking.py)
+
 
   
 - Run the file. You should hear the computer speak the test message.
@@ -679,7 +691,8 @@ Now, we need to create a reusable function that we can call whenever we want to 
 
 - Create a new file called voice_engine.py in your project folder. Write the Core Listening Function. Code below
 
- [voice_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/voice_engine.py)
+ [voice_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/voice_engine.py)
+
 
 
 - Run the voice engine test to make sure everything works together:
@@ -692,7 +705,7 @@ We're going to create a simple test that brings everything together and lets us 
 
 - Create a new file called test_modes.py and paste this code:
 
-   [test_modes.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/test_modes.py)
+   [test_modes.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/test_modes.py)
 
 
 - Run the Comprehensive Test;
@@ -711,7 +724,8 @@ The goal is to build trust in the voice interface. You should feel confident tha
 
 - Right now, our listen_to_speech() function works, but it's basic. We're going to make it much more robust and user-friendly. Create a new file enhanced_voice_engine.py and paste the below
 
-   [enhanced_voice_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/enhanced_voice_engine.py)
+   [enhanced_voice_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/enhanced_voice_engine.py)
+
 
 - Test the new enhanced system by running;
 ```
@@ -724,7 +738,8 @@ Now we'll enhance the text-to-speech system to make the computer's voice more na
 
 - Create a new file advanced_tts_engine.py and paste the below;
 
-   [advanced_tts_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/advanced_tts_engine.py)
+   [advanced_tts_engine.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/advanced_tts_engine.py)
+
 
 
 - Test the advanced TTS system by running this command;
@@ -738,7 +753,8 @@ The next is a cool feature that makes the voice interaction feel more natural. I
 
 - Create a new file wake_word_detector.py and paste the below code
 
-   [wake_word_detector.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/wake_word_detector.py)
+   [wake_word_detector.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/wake_word_detector.py)
+
 
 - Test the wake word detection
 ```
@@ -750,7 +766,8 @@ We would now build a voice confirmation system. This feature makes the interacti
 
 - Create a new file voice_confirmation_system.py and paste the below code
 
-   [voice_confirmation_system.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/voice_confirmation_system.py)
+   [voice_confirmation_system.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/voice_confirmation_system.py)
+
 
 - Test the confirmation system. Run;
 ```
@@ -762,7 +779,8 @@ Now, we would implement voice-to-text transcription display for verification. Th
 
 - Create a new file voice_transcription_display.py and paste the below code
 
-   [voice_transcription_display.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/voice_transcription_display.py)
+   [voice_transcription_display.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/voice_transcription_display.py)
+
 
 - Test the transcription display system by running the command;
 ```
