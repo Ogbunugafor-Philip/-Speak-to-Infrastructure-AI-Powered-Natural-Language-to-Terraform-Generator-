@@ -970,7 +970,7 @@ Let us build a text-based structured prompt system with numbered menu selections
 
 - create a file named structured_text_menu.py and paste the below codes in it
 
-  [structured_text_menu.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/structured_text_menu.py)
+[structured_text_menu.py](https://github.com/Ogbunugafor-Philip/-Speak-to-Infrastructure-AI-Powered-Natural-Language-to-Terraform-Generator-/blob/main/src/structured_text_menu.py)
 
 - Run the command to test the code
 ```
